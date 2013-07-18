@@ -1,0 +1,22 @@
+# Configure the manual-test.sandbox.edx.org sandbox.
+#
+# You can provision the instance using:
+#
+# ansible-playbook -u ubuntu --private-key=path/to/will-sandbox.pem -i inventory.ini edx_manual_test.yml
+#
+# (make sure you pip install -r ansible-requirements.txt first)
+#
+- name: Configure instance(s)
+  hosts: manual_test
+  sudo: True
+  gather_facts: True
+  vars:
+    migrate_db: True
+    openid_workaround: True
+  roles:
+    - common
+    - nginx
+    - edxlocal
+    - edxapp
+    - rabbitmq
+    - { role: 'edxapp', celery_worker: True }
